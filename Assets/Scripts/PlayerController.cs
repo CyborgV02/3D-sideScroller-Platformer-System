@@ -6,14 +6,18 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
    public float speed=5.0f;
-   public float jumpForce=5.0f;
+   public float jumpForce=8.0f;
    private Rigidbody rb ;
    public bool isGrounded=false;
    public bool canDash=true;
    public bool isDashing=false;
    public float dashSpeed=7.0f;
    public float dashDuration=0.3f;
-   public float dashCooldown=0.5f;
+   public float dashCooldown=0.1f;
+
+   public float jumpCount=1;
+   public float maxJumps=2;
+
   
     
 
@@ -26,14 +30,20 @@ public class PlayerController : MonoBehaviour
     {
       
 
-        if (Input.GetKeyDown(KeyCode.Space)&&isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space)&&jumpCount<maxJumps)
         {
             jump();
+            jumpCount++;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift)&&canDash)
+        if (Input.GetKeyDown(KeyCode.LeftShift)&&canDash&&isGrounded)
         {
            StartCoroutine(dash());
+        }
+
+        if (isGrounded == true)
+        {
+            jumpCount=1;
         }
     }
 
@@ -77,9 +87,8 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity=Vector3.zero;
         isDashing=false;
         rb.useGravity=true;
-         canDash=true;
         yield return new WaitForSeconds(dashCooldown);
-       
+        canDash=true;
     }
 
 }
