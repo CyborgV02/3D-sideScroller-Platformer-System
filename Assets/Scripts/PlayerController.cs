@@ -65,6 +65,10 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded=true;
         }
+        if (collision.gameObject.CompareTag("Hazard"))
+        {
+            Debug.Log("Game Over !");
+        }
     }
 
     void OnCollisionExit(Collision collision)
