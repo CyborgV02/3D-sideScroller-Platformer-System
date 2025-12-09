@@ -17,9 +17,11 @@ public class PlayerController : MonoBehaviour
 
    public float jumpCount=1;
    public float maxJumps=2;
+   public Transform groundCheck;
+   public float groundCheckradius=0.2f;
+   public LayerMask groundLayer;
 
-  
-    
+
 
     void Start()
     {
@@ -28,6 +30,17 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if(  Physics.CheckSphere(groundCheck.position,groundCheckradius,groundLayer))
+        {
+            isGrounded=true;
+        }
+
+        else
+        {
+            isGrounded=false;
+        }
+
+       
       
 
         if (Input.GetKeyDown(KeyCode.Space)&&jumpCount<maxJumps)
@@ -60,22 +73,11 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnCollisionEnter(Collision collision)
+
     {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded=true;
-        }
         if (collision.gameObject.CompareTag("Hazard"))
         {
             Debug.Log("Game Over !");
-        }
-    }
-
-    void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded=false;
         }
     }
 
@@ -94,5 +96,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(dashCooldown);
         canDash=true;
     }
+
+ 
 
 }
